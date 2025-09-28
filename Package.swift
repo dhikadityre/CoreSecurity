@@ -1,24 +1,38 @@
 // swift-tools-version: 6.0
-// The swift-tools-version declares the minimum version of Swift required to build this package.
 
 import PackageDescription
 
 let package = Package(
     name: "CoreSecurity",
+    platforms: [
+        .iOS(.v13),
+        .macOS(.v10_15),
+        .watchOS(.v6),
+        .tvOS(.v13)
+    ],
     products: [
-        // Products define the executables and libraries a package produces, making them visible to other packages.
         .library(
             name: "CoreSecurity",
-            targets: ["CoreSecurity"]),
+            targets: ["CoreSecurity"]
+        )
+    ],
+    dependencies: [
+        .package(url: "https://github.com/krzyzanowskim/CryptoSwift.git", from: "1.8.0"),
+        .package(path: "../AlgoreadMeCoreLogger")
     ],
     targets: [
-        // Targets are the basic building blocks of a package, defining a module or a test suite.
-        // Targets can depend on other targets in this package and products from dependencies.
         .target(
-            name: "CoreSecurity"),
+            name: "CoreSecurity",
+            dependencies: [
+                .product(name: "CryptoSwift", package: "CryptoSwift"),
+                "AlgoreadMeCoreLogger"
+            ],
+            path: "Sources/CoreSecurity"
+        ),
         .testTarget(
             name: "CoreSecurityTests",
-            dependencies: ["CoreSecurity"]
-        ),
+            dependencies: ["CoreSecurity"],
+            path: "Tests/CoreSecurityTests"
+        )
     ]
 )
